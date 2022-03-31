@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-row class="fill-height">
     <v-col>
       <v-sheet height="64">
@@ -113,7 +114,7 @@
               <v-toolbar-title v-html="eventoSeleccionado.name"></v-toolbar-title>
               <v-spacer></v-spacer>
               <v-btn icon>
-                <v-icon>mdi-heart</v-icon>
+                <v-icon @click="agregarFavorito(eventoSeleccionado, true)">mdi-heart</v-icon>
               </v-btn>
             </v-toolbar>
             <v-card-text>
@@ -121,9 +122,7 @@
               {{eventoSeleccionado.details}}
                 </form>
                 <form v-else>
-                    <textarea-autosize v-model="eventoSeleccionado.details" type="text" style="width:100%;" :min-height="100" placeholder="Agregar Nota">
-
-                    </textarea-autosize>
+                    <textarea-autosize v-model="eventoSeleccionado.details" type="text" style="width:100%;" :min-height="100" placeholder="Agregar Nota" />
                 </form>
             </v-card-text>
             <v-card-actions>
@@ -142,6 +141,24 @@
       </v-sheet>
     </v-col>
   </v-row>
+  <v-row>
+<v-col>
+<v-card>
+    <v-card-title>
+        Eventos Favoritos
+    </v-card-title>
+    <v-container>
+    <div style="margin: 10px;" v-for="evento in this.events" :key="evento.id">
+        <v-chip @click="irFavorito(evento)" v-if="evento.favorito" close @click:close="agregarFavorito(evento,false)" label dark :color="evento.color">
+            {{evento.name}}
+        </v-chip>
+    </div>
+    </v-container>
+    
+</v-card>
+</v-col>
+  </v-row>
+</div>
 </template>
 
 <script>
@@ -206,6 +223,8 @@ export default {
           events.push(appData);
         });
         this.events = events;
+
+        console.log(this.events)
       } catch (error) {
         console.log(error);
       }
@@ -251,7 +270,19 @@ export default {
 
         this.getEvents();
     },
+    async agregarFavorito(ev, bool)
+    {
+        await db.collection('calEvento').doc(ev.id).update({
+            favorito: bool
+        })
 
+        this.getEvents()
+    },
+
+    irFavorito(ev){
+        this.focus = ev.start
+        this.type="day"
+    },
     editEvent(ev)
     {
         this.eventoEdit = ev.id
