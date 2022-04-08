@@ -10,6 +10,9 @@
 
 <script>
 import { mapActions, mapGetters} from 'vuex';
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
 export default {
   data()
   {
@@ -31,18 +34,11 @@ export default {
       }
     },
     async handleClickSignIn() {
-      try {
-        const googleUser = await this.$gAuth.signIn();
-        if (!googleUser) {
-          return null;
-        }
-        this.isSignIn = this.$gAuth.isAuthorized;
-        this.setCurrentUser(googleUser)
+      let provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then((result) => {
+        this.setCurrentUser({name: result.additionalUserInfo.profile.name, token: result.credential.accessToken, email: result.additionalUserInfo.profile.email})
         this.$router.push({path:'/calendario'})
-      } catch (error) {
-        console.error(error);
-        return null;
-      }
+        });
     },
     handleClickDisconnect() {
       window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;

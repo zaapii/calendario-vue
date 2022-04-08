@@ -22,9 +22,10 @@ const actions = {
 
 const mutations = {
   setNewCurrentUser: (state, newCurrentUser) => {
-    state.token = newCurrentUser.wc.access_token;
-    state.email = newCurrentUser.Ju.zv;
-    state.name = newCurrentUser.Ju.tf;
+    console.log(newCurrentUser);
+    state.token = newCurrentUser.token;
+    state.email = newCurrentUser.email;
+    state.name = newCurrentUser.name;
   },
 
   logOutCurrentUser: (state) => {

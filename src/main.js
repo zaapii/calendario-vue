@@ -3,7 +3,6 @@ import App from './App.vue'
 import vuetify from './plugins/vuetify'
 import VueTextAreaAutosize from 'vue-textarea-autosize'
 import firebase from 'firebase/compat/app'
-import 'firebase/compat/firestore'
 import router from './router'
 
 import GAuth from 'vue-google-oauth2'

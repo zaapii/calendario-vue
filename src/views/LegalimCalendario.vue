@@ -1,5 +1,11 @@
 <template>
   <div>
+    <v-overlay :value="overlay">
+      <v-progress-circular
+        indeterminate
+        size="64"
+      ></v-progress-circular>
+    </v-overlay>
   <v-row class="fill-height">
     <v-col>
       <v-sheet height="64">
@@ -205,6 +211,7 @@ export default {
       "Conference",
       "Party",
     ],
+    overlay: true,
   }),
   created() {
     this.getEvents();
@@ -229,7 +236,10 @@ export default {
         this.events = events;
 
         console.log(this.events)
+        this.overlay = false;
       } catch (error) {
+        alert('an error ocurred')
+        this.overlay = false;
         console.log(error);
       }
     },

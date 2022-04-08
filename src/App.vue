@@ -81,6 +81,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import vAppBar from "./components/vAppBar";
+import firebase from "firebase/compat/app"
+import "firebase/compat/auth"
+import "firebase/compat/firestore"
 export default {
   components: {
     vAppBar,
@@ -91,14 +94,15 @@ export default {
   methods: {
     ...mapActions(['logOutCurrentUser']),
     async handleClickSignOut() {
-      try {
-        await this.$gAuth.signOut();
-        this.$router.push({path:'/login'})
-        this.isSignIn = this.$gAuth.isAuthorized;
+
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          alert("Successfully signed out.");
+        });
         this.logOutCurrentUser();
-      } catch (error) {
-        console.error(error);
-      }
+        this.$router.push({path:'/login'})
     },
   },
 };
