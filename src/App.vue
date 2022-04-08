@@ -50,12 +50,12 @@
             </v-list-item-content>
           </v-list-item>
           <v-list-item v-if="isAuthenticated">
-            <v-list-item-icon>
-              <v-icon>mdi-logout</v-icon>
-            </v-list-item-icon>
             <v-list-item-content>
+              
               <v-btn @click="handleClickSignOut" block elevation="2" outlined
-                >Salir</v-btn
+                ><v-list-item-icon>
+              <v-icon>mdi-logout</v-icon>
+            </v-list-item-icon>Salir</v-btn
               >
             </v-list-item-content>
           </v-list-item>
