@@ -124,7 +124,7 @@
               </v-btn>
             </v-toolbar>
             <v-card-text>
-            <form v-if="eventoEdit !== eventoSeleccionado.id">
+            <form v-if="eventoEdit !== eventoSeleccionado.id" style="color:#A39F9E">
               {{eventoSeleccionado.details}}
                 </form>
                 <form v-else>

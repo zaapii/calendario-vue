@@ -5,20 +5,25 @@
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-              <img
+<!--               <img
                 v-if="$vuetify.theme.dark"
                 src="https://legalim.netlify.app/img/logomark.c9fe0c97.png"
                 alt=""
                 style="width: 90%"
-              />
-              <img
+              /> -->
+               <img
+                src="https://www.seekpng.com/png/full/246-2467553_your-logo-here-png.png"
+                alt=""
+                style="max-width:50%;"
+              /> 
+<!--               <img
                 v-else
                 src="https://legalim.netlify.app/img/logomark.c9fe0c97.png"
                 style="width: 175%; transform: translateX(3rem)"
                 alt=""
-              />
+              /> -->
             </v-list-item-title>
-            <v-list-item-subtitle> Calendario </v-list-item-subtitle>
+            <v-list-item-subtitle> Calendar </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
 

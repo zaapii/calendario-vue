@@ -9,9 +9,14 @@
     style="margin-top: 20px;"
       v-model="$vuetify.theme.dark"
       inset
-      label="Modo Oscuro"
       persistent-hint
     ></v-switch>
+    <v-icon v-if="$vuetify.theme.dark">
+      mdi-weather-night
+    </v-icon>
+    <v-icon v-if="!$vuetify.theme.dark">
+      mdi-white-balance-sunny
+    </v-icon>
   </v-app-bar>
 </template>
 
