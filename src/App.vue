@@ -23,28 +23,28 @@
         </v-list-item>
 
         <v-divider></v-divider>
-
+        <!-- ESTO ES UN ASCO PERO ANDA -->
         <v-list dense nav>
           <v-list-item v-if="!isAuthenticated">
-            <v-list-item-icon>
-              <v-icon>mdi-login</v-icon>
-            </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/login"
-                ><v-btn block elevation="2" outlined
-                  >Ingresar</v-btn
+              <router-link to="/login">
+                <v-btn block elevation="2" outlined>
+                  <v-list-item-icon>
+                    <v-icon>mdi-login</v-icon>
+                  </v-list-item-icon>
+                  &nbsp;&nbsp;Ingresar&nbsp;&nbsp;&nbsp;</v-btn
                 ></router-link
               >
             </v-list-item-content>
           </v-list-item>
           <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-calendar</v-icon>
-            </v-list-item-icon>
             <v-list-item-content>
-              <router-link to="/calendario"
-                ><v-btn block elevation="2" outlined
-                  >Calendario</v-btn
+              <router-link to="/calendario">
+                <v-btn block elevation="2" outlined>
+                  <v-list-item-icon>
+                    <v-icon>mdi-calendar</v-icon>
+                  </v-list-item-icon>
+                  Calendario</v-btn
                 ></router-link
               >
             </v-list-item-content>
@@ -55,7 +55,8 @@
             </v-list-item-icon>
             <v-list-item-content>
               <v-btn @click="handleClickSignOut" block elevation="2" outlined
-                  >Salir</v-btn>
+                >Salir</v-btn
+              >
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -81,9 +82,9 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import vAppBar from "./components/vAppBar";
-import firebase from "firebase/compat/app"
-import "firebase/compat/auth"
-import "firebase/compat/firestore"
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
 export default {
   components: {
     vAppBar,
@@ -92,17 +93,16 @@ export default {
     ...mapGetters(["isAuthenticated"]),
   },
   methods: {
-    ...mapActions(['logOutCurrentUser']),
+    ...mapActions(["logOutCurrentUser"]),
     async handleClickSignOut() {
-
       firebase
         .auth()
         .signOut()
         .then(() => {
           alert("Successfully signed out.");
         });
-        this.logOutCurrentUser();
-        this.$router.push({path:'/login'})
+      this.logOutCurrentUser();
+      this.$router.push({ path: "/login" });
     },
   },
 };
@@ -119,5 +119,10 @@ export default {
 
 nav {
   padding: 10px;
+}
+
+a{
+  text-decoration: none;
+  color: white;
 }
 </style>
