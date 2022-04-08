@@ -163,6 +163,7 @@
 
 <script>
 import { db } from "@/main";
+import { mapGetters } from 'vuex';
 export default {
   data: () => ({
     focus: new Date().toISOString().substr(0, 10),
@@ -212,10 +213,13 @@ export default {
   mounted() {
     this.$refs.calendar.checkChange();
   },
+  computed: {
+    ...mapGetters(["getCurrentUserEmail"])
+  },
   methods: {
     async getEvents() {
       try {
-        const snapshot = await db.collection("calEvento").get();
+        const snapshot = await db.collection("calEvento").where("userEmail", "==", this.getCurrentUserEmail).get();
         const events = [];
         snapshot.forEach((doc) => {
           let appData = doc.data();

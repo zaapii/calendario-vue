@@ -1,7 +1,7 @@
 <template>
   <v-app-bar app>
     <!-- -->
-    <v-chip outlined label v-if="isAuthenticated">
+    <v-chip color="green" style="color: white;" outlined label v-if="isAuthenticated">
       Bienvenido {{ getCurrentUserName }} - {{ getCurrentUserEmail }}
     </v-chip>
     <v-divider></v-divider>
