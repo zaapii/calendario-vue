@@ -1,7 +1,6 @@
 <template>
   <v-theme-provider root>
     <v-app>
-      
       <v-navigation-drawer />
       <vAppBar />
       <v-main>
@@ -21,13 +20,15 @@
 import vAppBar from "./components/vAppBar";
 import vNavigationDrawer from "./components/vNavigationDrawer";
 export default {
+  mounted() {
+    console.log(this.$vuetify.breakpoint.width);
+  },
   components: {
     vAppBar,
-    vNavigationDrawer
+    vNavigationDrawer,
   },
 };
 </script>
-
 
 <style lang="scss">
 #app {
@@ -41,7 +42,7 @@ nav {
   padding: 10px;
 }
 
-a{
+a {
   text-decoration: none;
   color: white;
 }

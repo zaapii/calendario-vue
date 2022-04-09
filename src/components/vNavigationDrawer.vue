@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app>
+  <v-navigation-drawer app permanent :mini-variant.sync="mini">
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h6">
@@ -74,6 +74,11 @@ import "firebase/compat/firestore";
 export default {
 computed: {
     ...mapGetters(["isAuthenticated"]),
+    mini() {
+        if(this.$vuetify.breakpoint.name < 1000)
+        return true;
+        else return false
+    }
   },
   methods: {
     ...mapActions(["logOutCurrentUser"]),
