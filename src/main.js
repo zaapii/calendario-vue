@@ -8,7 +8,7 @@ import router from './router'
 import GAuth from 'vue-google-oauth2'
 import store from './store'
 const gauthOption = {
-  clientId: '1070446541548-hoj3hfphdroci457n7od971nkfrhkh2o',
+  clientId: '1070446541548-hoj3hfphdroci457n7od971nkfrhkh2o.apps.googleusercontent.com',
   scope: 'profile email',
   prompt: 'select_account'
 }

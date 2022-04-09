@@ -252,6 +252,7 @@ export default {
             start: this.start,
             end: this.end,
             color: this.color,
+            userEmail: this.getCurrentUserEmail
           });
           this.getEvents();
           this.name = "";
