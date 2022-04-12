@@ -5,6 +5,9 @@ import VueTextAreaAutosize from 'vue-textarea-autosize'
 import firebase from 'firebase/compat/app'
 import router from './router'
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 import GAuth from 'vue-google-oauth2'
 import store from './store'
 const gauthOption = {
@@ -15,6 +18,8 @@ const gauthOption = {
 Vue.use(GAuth, gauthOption)
 
 Vue.use(VueTextAreaAutosize)
+
+Vue.use(VueSweetalert2);
 
 firebase.initializeApp({
   apiKey: "AIzaSyC7rMsoQWYfTWXOdg7qUpBMZcjhKkOW1rU",
