@@ -67,10 +67,32 @@
             locale="es"
           ></v-calendar>
 
-          <v-dialog v-model="dialog" max-width="500">
+          <v-dialog v-model="dialog" max-width="600">
             <v-card>
               <v-container>
                 <v-form @submit.prevent="addEvent">
+                  <v-row>
+                    <v-col>
+                      <v-chip label outlined color="primary">Inicio</v-chip>
+                      <vc-date-picker
+                        class="mb-8 mt-4"
+                        v-model="start"
+                        :mode="!isChecked ? 'dateTime' : 'date'"
+                      />
+                    </v-col>
+                    <v-col>
+                      <v-chip label outlined color="primary">Fin</v-chip>
+                      <vc-date-picker
+                        class="mb-8 mt-4"
+                        v-model="end"
+                        :mode="!isChecked ? 'dateTime' : 'date'"
+                      />
+                    </v-col>
+                  </v-row>
+                  <v-radio-group v-model="isChecked" @change="asd">
+                    <v-radio label="Con hora de Inicio y Fin" color="indigo" :value="false"></v-radio>
+                    <v-radio label="Evento de Todo el día" color="red" :value="true"></v-radio>
+                  </v-radio-group>
                   <v-text-field
                     v-model="name"
                     type="text"
@@ -80,16 +102,6 @@
                     v-model="details"
                     type="text"
                     label="Detalles"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="start"
-                    type="date"
-                    label="Fecha Inicio"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="end"
-                    type="date"
-                    label="Fecha Fin"
                   ></v-text-field>
                   <v-text-field
                     v-model="color"
@@ -225,6 +237,8 @@ export default {
     start: null,
     end: null,
     name: null,
+    timeZone: "America/Argentina/Buenos_Aires",
+    isChecked: false,
     details: null,
     color: "#1976D2",
     dialog: false,
@@ -265,6 +279,9 @@ export default {
     ...mapGetters(["getCurrentUserEmail", "getCurrentUserToken"]),
   },
   methods: {
+    asd() {
+      console.log(this.isChecked);
+    },
     async getEvents() {
       try {
         const snapshot = await db
@@ -295,20 +312,22 @@ export default {
           await db.collection("calEvento").add({
             name: this.name,
             details: this.details,
-            start: this.start,
-            end: this.end,
+            start: this.start.toISOString().substring(0,10),
+            end: this.end.toISOString().substring(0,10),
             color: this.color,
             userEmail: this.getCurrentUserEmail,
           });
           const data = {
-            start: {
-              date: this.start,
+            "start": {
+              "dateTime": this.start.toISOString(),
+              "timeZone": this.timeZone
             },
-            end: {
-              date: this.end,
+            "end": {
+              "dateTime": this.end.toISOString(),
+              "timeZone": this.timeZone
             },
-            summary: this.details,
-            description: this.name,
+            "summary": this.details,
+            "description": this.name,
           };
           const config = {
             headers: {
