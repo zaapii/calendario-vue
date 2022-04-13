@@ -76,8 +76,10 @@
                       <v-chip label outlined color="primary">Inicio</v-chip>
                       <vc-date-picker
                         class="mb-8 mt-4"
+                        :min-date="new Date()"
                         v-model="start"
                         :mode="!isChecked ? 'dateTime' : 'date'"
+                        is24hr
                       />
                     </v-col>
                     <v-col>
@@ -86,12 +88,21 @@
                         class="mb-8 mt-4"
                         v-model="end"
                         :mode="!isChecked ? 'dateTime' : 'date'"
+                        is24hr
                       />
                     </v-col>
                   </v-row>
-                  <v-radio-group v-model="isChecked" @change="asd">
-                    <v-radio label="Con hora de Inicio y Fin" color="indigo" :value="false"></v-radio>
-                    <v-radio label="Evento de Todo el día" color="red" :value="true"></v-radio>
+                  <v-radio-group v-model="isChecked">
+                    <v-radio
+                      label="Con hora de Inicio y Fin"
+                      color="indigo"
+                      :value="false"
+                    ></v-radio>
+                    <v-radio
+                      label="Evento de Todo el día"
+                      color="red"
+                      :value="true"
+                    ></v-radio>
                   </v-radio-group>
                   <v-text-field
                     v-model="name"
@@ -128,7 +139,7 @@
           >
             <v-card color="grey lighten-4" min-width="350px" flat>
               <v-toolbar :color="eventoSeleccionado.color" dark>
-                <v-btn @click="deleteEvent(eventoSeleccionado.id)" icon>
+                <v-btn @click="deleteEvent(eventoSeleccionado)" icon>
                   <v-icon>mdi-delete</v-icon>
                 </v-btn>
                 <v-toolbar-title
@@ -237,7 +248,7 @@ export default {
     start: null,
     end: null,
     name: null,
-    timeZone: "America/Argentina/Buenos_Aires",
+    timeZone: "Etc/UTC",
     isChecked: false,
     details: null,
     color: "#1976D2",
@@ -266,9 +277,9 @@ export default {
       "Conference",
       "Party",
     ],
-    overlay: true,
   }),
   created() {
+    this.$root.$refs.C = this;
     this.getEvents();
   },
 
@@ -276,14 +287,16 @@ export default {
     this.$refs.calendar.checkChange();
   },
   computed: {
-    ...mapGetters(["getCurrentUserEmail", "getCurrentUserToken"]),
+    ...mapGetters([
+      "getCurrentUserEmail",
+      "getCurrentUserToken",
+      "getGoogleCalendarEvents",
+    ]),
   },
   methods: {
-    asd() {
-      console.log(this.isChecked);
-    },
     async getEvents() {
       try {
+        this.overlay = true;
         const snapshot = await db
           .collection("calEvento")
           .where("userEmail", "==", this.getCurrentUserEmail)
@@ -295,6 +308,40 @@ export default {
           events.push(appData);
         });
         this.events = events;
+
+        if (this.getGoogleCalendarEvents !== null) {
+          this.getGoogleCalendarEvents.forEach((evento) => {
+            let details;
+            if (
+              evento.status !== "cancelled" &&
+              evento.start.dateTime !== undefined
+            ) {
+              if(evento.description !== undefined)
+              {
+                details = evento.description;
+                }
+              let start =
+                evento.start.dateTime.split("T")[0] +
+                " " +
+                evento.start.dateTime.split("T")[1].substring(0, 5);
+              let end =
+                evento.end.dateTime.split("T")[0] +
+                " " +
+                evento.end.dateTime.split("T")[1].substring(0, 5);
+              let name = evento.summary;
+              let color = "#"+Math.floor(Math.random() * 16777215).toString(16);
+              let nuevoEventoGoogle = {
+                start,
+                end,
+                name,
+                color,
+                details,
+                isFromGoogle: true,
+              };
+              this.events.push(nuevoEventoGoogle);
+            }
+          });
+        }
         this.overlay = false;
       } catch (error) {
         alert("an error ocurred");
@@ -309,25 +356,36 @@ export default {
         // ---------- //
 
         if (this.name && this.start && this.end) {
+          this.start.setHours(
+            this.start.getHours() - new Date().getTimezoneOffset() / 60
+          );
+          this.end.setHours(
+            this.end.getHours() - new Date().getTimezoneOffset() / 60
+          );
           await db.collection("calEvento").add({
             name: this.name,
             details: this.details,
-            start: this.start.toISOString().substring(0,10),
-            end: this.end.toISOString().substring(0,10),
+            start:
+              this.start.toISOString().split("T")[0] +
+              " " +
+              this.start.toISOString().split("T")[1].substring(0, 5),
+            end:
+              this.end.toISOString().split("T")[0] +
+              " " +
+              this.end.toISOString().split("T")[1].substring(0, 5),
             color: this.color,
             userEmail: this.getCurrentUserEmail,
+            isFromGoogle: false,
           });
           const data = {
-            "start": {
-              "dateTime": this.start.toISOString(),
-              "timeZone": this.timeZone
+            start: {
+              dateTime: this.start.toISOString(),
             },
-            "end": {
-              "dateTime": this.end.toISOString(),
-              "timeZone": this.timeZone
+            end: {
+              dateTime: this.end.toISOString(),
             },
-            "summary": this.details,
-            "description": this.name,
+            summary: this.details,
+            description: this.name,
           };
           const config = {
             headers: {
@@ -380,20 +438,32 @@ export default {
       }
     },
 
+    ocultarGoogle()
+    {
+      this.events = this.events.filter(evento => {
+        return evento.isFromGoogle === false
+      })
+    },
+
     async updateEvent(ev) {
+      if(!ev.isFromGoogle)
+      {
       await db.collection("calEvento").doc(this.eventoEdit).update({
         details: ev.details,
       });
-
       this.abrirSeleccionado = false;
       this.eventoEdit = null;
+      } else alert('No puede editar un Evento de Google');
     },
 
     async deleteEvent(ev) {
-      await db.collection("calEvento").doc(ev).delete();
+      if(!ev.isFromGoogle)
+      {
+      await db.collection("calEvento").doc(ev.id).delete();
       this.abrirSeleccionado = false;
 
       this.getEvents();
+      } else alert('No puede eliminar un Evento de Google');
     },
     async agregarFavorito(ev, bool) {
       await db.collection("calEvento").doc(ev.id).update({

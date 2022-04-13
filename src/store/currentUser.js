@@ -2,12 +2,14 @@ const state = {
   token: null,
   email: null,
   name: null,
+  googleCalendarEvents: null,
 };
 
 const getters = {
   getCurrentUserEmail: (state) => state.email,
   getCurrentUserToken: (state) => state.token,
   getCurrentUserName: (state) => state.name,
+  getGoogleCalendarEvents: (state) => state.googleCalendarEvents,
   isAuthenticated: (state) => !!state.token,
 };
 
@@ -18,6 +20,10 @@ const actions = {
   logOutCurrentUser({ commit }) {
     commit("logOutCurrentUser");
   },
+  setGoogleCalendarEvents({commit}, payload)
+  {
+    commit("setGoogleCalendarEvents", payload);
+  }
 };
 
 const mutations = {
@@ -27,11 +33,15 @@ const mutations = {
     state.email = newCurrentUser.email;
     state.name = newCurrentUser.name;
   },
-
+  setGoogleCalendarEvents(state, eventos)
+  {
+    state.googleCalendarEvents = eventos
+  },
   logOutCurrentUser: (state) => {
     state.token = null;
     state.email = null;
     state.name = null;
+    state.googleCalendarEvents = null;
   },
 };
 

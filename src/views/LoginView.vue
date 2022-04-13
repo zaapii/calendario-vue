@@ -12,7 +12,6 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import axios from "axios";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
@@ -24,16 +23,6 @@ export default {
   },
   methods: {
     ...mapActions(["setCurrentUser", "logOutCurrentUser"]),
-    async handleClickUpdateScope() {
-      const option = new window.gapi.auth2.SigninOptionsBuilder();
-      const googleUser = this.$gAuth.GoogleAuth.currentUser.get();
-      try {
-        await googleUser.grant(option);
-        console.log("success");
-      } catch (error) {
-        console.error(error);
-      }
-    },
     async handleClickSignIn() {
       let provider = new firebase.auth.GoogleAuthProvider();
       provider.addScope("https://www.googleapis.com/auth/calendar.readonly");
@@ -53,11 +42,6 @@ export default {
             token: result.credential.accessToken,
             email: result.additionalUserInfo.profile.email,
           });
-          const config = {
-            headers: {
-              Authorization: `Bearer ${result.credential.accessToken}`,
-            },
-          };
           /* axios
             .get(
               "https://www.googleapis.com/calendar/v3/users/me/calendarList",
@@ -66,31 +50,13 @@ export default {
             .then((response) => {
               console.log(response);
             }); */
-            axios
-            .get(
-              `https://www.googleapis.com/calendar/v3/calendars/${result.additionalUserInfo.profile.email}/events`,
-              config
-            )
-            .then((response) => {
-              console.log(response);
-            });
+
           this.$router.push({ path: "/calendario" });
         });
-    },
-    handleClickDisconnect() {
-      window.location.href = `https://www.google.com/accounts/Logout?continue=https://appengine.google.com/_ah/logout?continue=${window.location.href}`;
     },
   },
   computed: {
     ...mapGetters(["isAuthenticated"]),
-  },
-  created() {
-    let that = this;
-    let checkGauthLoad = setInterval(function () {
-      that.isInit = that.$gAuth.isInit;
-      that.isSignIn = that.$gAuth.isAuthorized;
-      if (that.isInit) clearInterval(checkGauthLoad);
-    }, 1000);
   },
 };
 </script>
