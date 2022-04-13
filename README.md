@@ -9,6 +9,7 @@
 <p>-> Interfaz mejorada</p>
 <p>-> Se puede seleccionar eventos de todo el día o en determinados horarios.</p>
 <p>-> DateTimePicker mejorado. Ahora se puede seleccionar tanto día como hora, y se cargan tanto en Firebase como en Google Calendar con su hora.</p>
+<hr>
 
 @old versión 0.2.0 
 <p>-> Autenticación con Firebase Google Auth.</p>
@@ -16,6 +17,7 @@
 <p>-> Nueva interfaz</p>
 <p>-> Marcar Eventos como Favoritos</p>
 <p>-> Modo Oscuro y modo Light</p>
+<hr>
 
 <p>@old Versión 0.1.0 del componente Calendario hecho en Vue con Vuetify + Firebase</p>
 
