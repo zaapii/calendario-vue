@@ -1,7 +1,12 @@
 <!-- CALENDARIO VUE + VUETIFY + FIREBASE + GOOGLE CALENDAR API -->
 ## Changelog
 
-## versión 0.5.0
+## versión 0.6.0
+<p>-> Modo Mobile Implementado</p>
+<p>-> Algunas mejoras gráficas</p>
+<hr>
+
+@old versión 0.5.0
 <p>-> Implementación de Google Calendar API</p>
 <p>-> Posibilidad de cargar Eventos directamente a la cuenta de Google con el API Calendar</p>
 <p>-> Posibilidad de importar todos los Eventos de nuestra cuenta de Google</p>
