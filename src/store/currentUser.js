@@ -3,12 +3,14 @@ const state = {
   email: null,
   name: null,
   googleCalendarEvents: null,
+  picture: null
 };
 
 const getters = {
   getCurrentUserEmail: (state) => state.email,
   getCurrentUserToken: (state) => state.token,
   getCurrentUserName: (state) => state.name,
+  getCurrentUserPicture: (state) => state.picture,
   getGoogleCalendarEvents: (state) => state.googleCalendarEvents,
   isAuthenticated: (state) => !!state.token,
 };
@@ -32,6 +34,7 @@ const mutations = {
     state.token = newCurrentUser.token;
     state.email = newCurrentUser.email;
     state.name = newCurrentUser.name;
+    state.picture = newCurrentUser.picture
   },
   setGoogleCalendarEvents(state, eventos)
   {
@@ -41,6 +44,7 @@ const mutations = {
     state.token = null;
     state.email = null;
     state.name = null;
+    state.picture = null;
     state.googleCalendarEvents = null;
   },
 };

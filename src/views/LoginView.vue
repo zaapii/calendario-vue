@@ -1,13 +1,20 @@
 <template>
-  <div class="form">
+<v-dialog
+        transition="dialog-bottom-transition"
+        max-width="600"
+        v-model="dialog"
+        persistent
+      >
     <img
       src="http://www.androidpolice.com/wp-content/themes/ap2/ap_resize/ap_resize.php?src=http%3A%2F%2Fwww.androidpolice.com%2Fwp-content%2Fuploads%2F2015%2F10%2Fnexus2cee_Search-Thumb-150x150.png&w=150&h=150&zc=3"
     />
 
+    <h3 style="color:white">Bienvenidos a Vue-Calendar</h3>
+    <h5 style="color:white">Para seguir, por favor ingrese con su cuenta de Google</h5>
     <button @click="handleClickSignIn" v-if="!isAuthenticated">
       Ingresar con Google
     </button>
-  </div>
+</v-dialog>
 </template>
 
 <script>
@@ -19,6 +26,7 @@ export default {
   data() {
     return {
       isInit: false,
+      dialog: true,
     };
   },
   methods: {
@@ -37,20 +45,13 @@ export default {
         .auth()
         .signInWithPopup(provider)
         .then((result) => {
+          console.log(result)
           this.setCurrentUser({
             name: result.additionalUserInfo.profile.name,
             token: result.credential.accessToken,
             email: result.additionalUserInfo.profile.email,
+            picture: result.additionalUserInfo.profile.picture
           });
-          /* axios
-            .get(
-              "https://www.googleapis.com/calendar/v3/users/me/calendarList",
-              config
-            )
-            .then((response) => {
-              console.log(response);
-            }); */
-
           this.$router.push({ path: "/calendario" });
         });
     },

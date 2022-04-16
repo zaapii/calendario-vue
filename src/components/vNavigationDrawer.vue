@@ -1,20 +1,8 @@
 <template>
-  <v-navigation-drawer app permanent :mini-variant.sync="mini">
+  <v-navigation-drawer v-if="!this.$vuetify.breakpoint.mobile" app>
         <v-list-item>
           <v-list-item-content>
             <v-list-item-title class="text-h6">
-<!--               <img
-                v-if="$vuetify.theme.dark"
-                src="https://legalim.netlify.app/img/logomark.c9fe0c97.png"
-                alt=""
-                style="width: 90%"
-              /> -->
-<!--               <img
-                v-else
-                src="https://legalim.netlify.app/img/logomark.c9fe0c97.png"
-                style="width: 175%; transform: translateX(3rem)"
-                alt=""
-              /> -->
                <img
                 src="https://www.seekpng.com/png/full/246-2467553_your-logo-here-png.png"
                 alt=""
@@ -72,13 +60,12 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 export default {
+  created()
+  {
+    this.$root.$refs.V = this;
+  },
 computed: {
     ...mapGetters(["isAuthenticated"]),
-    mini() {
-        if(this.$vuetify.breakpoint.name < 1000)
-        return true;
-        else return false
-    }
   },
   methods: {
     ...mapActions(["logOutCurrentUser"]),
