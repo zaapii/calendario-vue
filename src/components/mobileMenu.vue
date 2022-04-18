@@ -99,7 +99,7 @@ export default {
         btnText() {
       if (this.getGoogleCalendarEvents !== null) {
         return "¡Eventos Importados!";
-      } else return "Importar Eventos de Google";
+      } else return "Importar desde Google";
     },
   },
   methods: {

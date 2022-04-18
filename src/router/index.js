@@ -8,6 +8,11 @@ Vue.use(VueRouter)
 
 const routes = [
   {
+    path: '/',
+    name: 'Landing',
+    component: Calendario
+  },
+  {
     path: '/login',
     name: 'login',
     component: LoginView

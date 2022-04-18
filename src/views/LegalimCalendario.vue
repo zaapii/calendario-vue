@@ -5,12 +5,21 @@
     </v-overlay>
     <v-row class="fill-height">
       <v-col>
-        <v-sheet height="64">
+        <v-sheet height="120">
+          <v-toolbar-title v-if="$refs.calendar">
+            {{ $refs.calendar.title.toUpperCase() }}
+          </v-toolbar-title>
           <v-toolbar flat>
-            <v-btn color="primary" dark class="mr-4" @click="dialog = true"
-              >Agregar</v-btn
+            <v-btn
+              :small="$vuetify.breakpoint.mobile"
+              color="primary"
+              dark
+              class="mr-4"
+              @click="dialog = true"
+              >Nuevo</v-btn
             >
             <v-btn
+              :small="$vuetify.breakpoint.mobile"
               outlined
               class="mr-4"
               color="grey darken-2"
@@ -19,18 +28,21 @@
               Hoy
             </v-btn>
             <v-btn fab text small color="grey darken-2" @click="prev">
-              <v-icon small> mdi-chevron-left </v-icon>
+              <v-icon small> mdi-arrow-left-box </v-icon>
             </v-btn>
             <v-btn fab text small color="grey darken-2" @click="next">
-              <v-icon small> mdi-chevron-right </v-icon>
+              <v-icon small> mdi-arrow-right-box </v-icon>
             </v-btn>
-            <v-toolbar-title v-if="$refs.calendar">
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-menu bottom right>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn outlined color="grey darken-2" v-bind="attrs" v-on="on">
+                <v-btn
+                  :small="$vuetify.breakpoint.mobile"
+                  outlined
+                  color="grey darken-2"
+                  v-bind="attrs"
+                  v-on="on"
+                >
                   <span>{{ typeToLabel[type] }}</span>
                   <v-icon right> mdi-menu-down </v-icon>
                 </v-btn>
@@ -316,10 +328,9 @@ export default {
               evento.status !== "cancelled" &&
               evento.start.dateTime !== undefined
             ) {
-              if(evento.description !== undefined)
-              {
+              if (evento.description !== undefined) {
                 details = evento.description;
-                }
+              }
               let start =
                 evento.start.dateTime.split("T")[0] +
                 " " +
@@ -329,7 +340,8 @@ export default {
                 " " +
                 evento.end.dateTime.split("T")[1].substring(0, 5);
               let name = evento.summary;
-              let color = "#"+Math.floor(Math.random() * 16777215).toString(16);
+              let color =
+                "#" + Math.floor(Math.random() * 16777215).toString(16);
               let nuevoEventoGoogle = {
                 start,
                 end,
@@ -438,32 +450,29 @@ export default {
       }
     },
 
-    ocultarGoogle()
-    {
-      this.events = this.events.filter(evento => {
-        return evento.isFromGoogle === false
-      })
+    ocultarGoogle() {
+      this.events = this.events.filter((evento) => {
+        return evento.isFromGoogle === false;
+      });
     },
 
     async updateEvent(ev) {
-      if(!ev.isFromGoogle)
-      {
-      await db.collection("calEvento").doc(this.eventoEdit).update({
-        details: ev.details,
-      });
-      this.abrirSeleccionado = false;
-      this.eventoEdit = null;
-      } else alert('No puede editar un Evento de Google');
+      if (!ev.isFromGoogle) {
+        await db.collection("calEvento").doc(this.eventoEdit).update({
+          details: ev.details,
+        });
+        this.abrirSeleccionado = false;
+        this.eventoEdit = null;
+      } else alert("No puede editar un Evento de Google");
     },
 
     async deleteEvent(ev) {
-      if(!ev.isFromGoogle)
-      {
-      await db.collection("calEvento").doc(ev.id).delete();
-      this.abrirSeleccionado = false;
+      if (!ev.isFromGoogle) {
+        await db.collection("calEvento").doc(ev.id).delete();
+        this.abrirSeleccionado = false;
 
-      this.getEvents();
-      } else alert('No puede eliminar un Evento de Google');
+        this.getEvents();
+      } else alert("No puede eliminar un Evento de Google");
     },
     async agregarFavorito(ev, bool) {
       await db.collection("calEvento").doc(ev.id).update({
